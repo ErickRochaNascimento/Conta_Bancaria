@@ -1,8 +1,8 @@
 ﻿using System;
 
-class contaBancaria
+class ContaBancaria
 {
-    private List<ContaCorrente> contascorrente = new List<ContaCorrente>();
+    private List<ContaCorrente> ContasCorrente = new List<ContaCorrente>();
 
 
     public string NomeTitular { get; set; }
@@ -16,6 +16,29 @@ class contaBancaria
         Console.WriteLine($"Conta informações: \n Nome titular: {NomeTitular} \n Numero conta: {NumeroConta} \n Saldo: {Saldo}");
     }
 
-  
+    public void AdicionarContaCorrente(ContaCorrente contaCorrente)
+    {
+        ContasCorrente.Add( contaCorrente );
+    }
+
+
+
+    public void ExibirContas()
+    {
+        Console.WriteLine("Contas corrente: ");
+        foreach ( var ContaBancaria in ContasCorrente)
+        {
+            Console.WriteLine($"Conta corrente: {ContaBancaria.NomeTitular}");
+        }
+
+    }
+}
+
+class ContaCorrente : ContaBancaria
+{
+    public string CriarContaCorrente
+    {
+        get; set; 
+    }
 
 }
