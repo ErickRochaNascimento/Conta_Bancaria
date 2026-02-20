@@ -4,7 +4,6 @@ using System.Security.Cryptography.X509Certificates;
 
 public abstract class ContaBancaria
 {
-    private List<ContaCorrente> ContasCorrente = new List<ContaCorrente>();
 
 
     public string NomeTitular { get; private set; }
@@ -50,16 +49,7 @@ public abstract class ContaBancaria
         Console.WriteLine($"Conta informações: \n Nome titular: {NomeTitular} \n Numero conta: {NumeroConta} \n Saldo: {Saldo} \n Tipo conta: {TipoConta}");
     }
 
-    public void ExibirContas()
-    {
-        Console.WriteLine("Contas corrente: ");
-        foreach (var ContaBancaria in ContasCorrente)
-        {
-            Console.WriteLine($"Conta corrente: {ContaBancaria.NomeTitular}");
-        }
-
-    }
-
+    
     public abstract void DefinirLimiteEmprestimo();
 }
 
@@ -100,56 +90,14 @@ public class ContaEmpresarial : ContaBancaria
 
 class Program
 {
+    static List<ContaBancaria> ContasBancaria = new List<ContaBancaria>();
 
-    static int QuantidadeContasCorrente = 0;
-    static int QuantidadeContasEmpresarial = 0;
-    static int QuantidadeContasPoupanca = 0;
-   static void CriarConta()
+    static int QuantidadeContasBancaria = 0;
+
+
+    static void Menu()
     {
-        Console.WriteLine("Digite o nome do titular da conta:");
-        string nomeTitular = Console.ReadLine();
-        Console.WriteLine("Digite o saldo inicial:");
-        decimal saldo = decimal.Parse(Console.ReadLine());
-        Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial");
-        int opcaoTipoConta = int.Parse(Console.ReadLine());
-        Console.WriteLine("Digite uma senha de 6 digitos");
-        int senha = int.Parse(Console.ReadLine());
-        string tipoConta = opcaoTipoConta switch
-        {
-            1 => "Corrente",
-            2 => "Poupança",
-            3 => "Empresarial",
-            _ => throw new ArgumentException("Tipo de conta inválido")
-        };
-        int numeroConta;
-        if (tipoConta == "Corrente")
-        {
-            QuantidadeContasCorrente++;
-            ContaBancaria novaConta = new ContaCorrente(nomeTitular, QuantidadeContasCorrente, saldo, tipoConta, senha);
-            novaConta.ExibirInformacaoConta();
-
-        }
-        else if (tipoConta == "Poupança")
-        {
-            QuantidadeContasPoupanca++;
-            ContaBancaria novaConta = new ContaPoupanca(nomeTitular, QuantidadeContasPoupanca, saldo, tipoConta, senha);
-            novaConta.ExibirInformacaoConta();
-        }
-        else if (tipoConta == "Empresarial")
-        {
-            QuantidadeContasEmpresarial++;
-            ContaBancaria novaConta = new ContaEmpresarial(nomeTitular, QuantidadeContasEmpresarial, saldo, tipoConta, senha);
-            novaConta.ExibirInformacaoConta();
-        }
-    }
-    static void Main(string[] args)
-    {
-
-
-
-
-   
-    Console.WriteLine($"Digite o numero da opção:\n 1- Criar Conta \n 2- Acessar conta");
+        Console.WriteLine($"Digite o numero da opção:\n 1- Criar Conta \n 2- Acessar conta");
         int opcao = int.Parse(Console.ReadLine());
         do
         {
@@ -161,11 +109,7 @@ class Program
                     break;
                 case 2:
                     Console.WriteLine("Acesso a conta:");
-                    Console.WriteLine("Digite o Numero da Conta:");
-                    string numeroContaAcesso = Console.ReadLine();
-                    Console.WriteLine("Digite a Senha:");
-                    int senhaAcesso = int.Parse(Console.ReadLine());
-
+                    AcessarConta();
                     break;
                 default:
                     Console.WriteLine("Opção inválida");
@@ -179,6 +123,72 @@ class Program
             opcao = int.Parse(Console.ReadLine());
 
         } while (true);
+    }
+
+    static void AcessarConta()
+    {
+
+        Console.WriteLine("Digite o Numero da Conta:");
+        string numeroContaAcesso = Console.ReadLine();
+        Console.WriteLine("Digite a Senha:");
+        int senhaAcesso = int.Parse(Console.ReadLine());
+        foreach (var contaBancaria in ContasBancaria)
+        {
+            if (contaBancaria.NumeroConta.ToString() == numeroContaAcesso && contaBancaria.Senha == senhaAcesso)
+            {
+                Console.WriteLine("Acesso concedido à conta corrente.");
+                contaBancaria.ExibirInformacaoConta();
+                return;
+            }
+        }
+    }
+    static void CriarConta()
+    {
+        Console.WriteLine("Digite o nome do titular da conta:");
+        string nomeTitular = Console.ReadLine();
+        Console.WriteLine("Digite o saldo inicial:");
+        decimal saldo = decimal.Parse(Console.ReadLine());
+        Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial");
+        int opcaoTipoConta = int.Parse(Console.ReadLine());
+        Console.WriteLine("Digite uma senha de 6 digitos");
+        int senha = int.Parse(Console.ReadLine());
+
+        string tipoConta = opcaoTipoConta switch
+        {
+            1 => "Corrente",
+            2 => "Poupança",
+            3 => "Empresarial",
+            _ => throw new ArgumentException("Tipo de conta inválido")
+        };
+        int numeroConta;
+        if (tipoConta == "Corrente")
+        {
+            QuantidadeContasBancaria++;
+            ContaBancaria novaConta = new ContaCorrente(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
+            novaConta.ExibirInformacaoConta();
+            ContasBancaria.Add(novaConta);
+
+        }
+        else if (tipoConta == "Poupança")
+        {
+            QuantidadeContasBancaria++;
+            ContaBancaria novaConta = new ContaPoupanca(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
+            novaConta.ExibirInformacaoConta();
+            ContasBancaria.Add(novaConta);
+        }
+        else if (tipoConta == "Empresarial")
+        {
+            QuantidadeContasBancaria++;
+            ContaBancaria novaConta = new ContaEmpresarial(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
+            novaConta.ExibirInformacaoConta();
+            ContasBancaria.Add(novaConta);
+        }
+        Menu();
+    }
+    static void Main(string[] args)
+    {
+        Menu();
+    
         
 
     } }
