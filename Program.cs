@@ -30,18 +30,6 @@ public abstract class ContaBancaria
     {
     }
 
-    public void CriarContaBancaria(string nomeTitular, int numeroConta, decimal saldo, string tipoConta, int senha)
-    {
-
-        NomeTitular = nomeTitular;
-        NumeroConta = numeroConta;
-        Saldo = saldo;
-        TipoConta = tipoConta;
-        Senha = senha;
-
-    }
-
-    
     public virtual void Saque(decimal valor)
     {
         if (Saldo > valor)
@@ -100,16 +88,6 @@ public class ContaCorrente : ContaBancaria
     }
     public decimal TaxaSaque = 0.10m;
 
-    
-
-    protected ContaCorrente(decimal taxasaque)
-    {
-        TaxaSaque = taxasaque;
-    }
-
-    protected ContaCorrente()
-    {
-    }
 
     public override void Saque(decimal valor)
     {
