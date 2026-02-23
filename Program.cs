@@ -44,12 +44,18 @@ public abstract class ContaBancaria
         }
     }
 
+    public void Depositar(decimal valor)
+    {
+        Saldo += valor;
+        Console.WriteLine($"Deposito realizado com sucesso. Saldo atual: {Saldo}");
+    }
+
     public virtual void LimiteEmprestimo(decimal valor)
     {
-       decimal LimiteEmprestimo = 1 * Saldo;
-        if (valor <= LimiteEmprestimo)
+       decimal limiteEmprestimo = 1 * Saldo;
+        if (valor <= limiteEmprestimo)
         {
-            Console.WriteLine($"Limite de emprestimo de {LimiteEmprestimo}");
+            Console.WriteLine($"Limite de emprestimo de {limiteEmprestimo}");
             for(int i = 0; i < 5; i++)
             {
                 Console.WriteLine($"Parcela {i + 1}: {valor / 5}");
@@ -58,7 +64,7 @@ public abstract class ContaBancaria
         }
         else
         {
-            Console.WriteLine($"Pedido maior que o limite. \n Limite emprestimo: {LimiteEmprestimo}");
+            Console.WriteLine($"Pedido maior que o limite. \n Limite emprestimo: {limiteEmprestimo}");
         }
     }
 
@@ -72,6 +78,7 @@ public abstract class ContaBancaria
     {
         Console.WriteLine($"Conta informações: \n Nome titular: {NomeTitular} \n Numero conta: {NumeroConta} \n Saldo: {Saldo} \n Tipo conta: {TipoConta}");
     }
+
 
 
 
@@ -132,10 +139,10 @@ public class ContaEmpresarial : ContaBancaria
     }
     public override void LimiteEmprestimo(decimal valor)
     {
-        decimal LimiteEmprestimo = 2 * Saldo;
-        if (valor <= LimiteEmprestimo)
+        decimal limiteEmprestimo = 2 * Saldo;
+        if (valor <= limiteEmprestimo)
         {
-            Console.WriteLine($"Limite de emprestimo de {LimiteEmprestimo}");
+            Console.WriteLine($"Limite de emprestimo de {limiteEmprestimo}");
             for (int i = 0; i < 5; i++)
             {
                 Console.WriteLine($"Parcela {i + 1}: {valor / 5}");
@@ -144,16 +151,9 @@ public class ContaEmpresarial : ContaBancaria
         }
         else
         {
-            Console.WriteLine($"Pedido maior que o limite. \n Limite emprestimo: {LimiteEmprestimo}");
+            Console.WriteLine($"Pedido maior que o limite. \n Limite emprestimo: {limiteEmprestimo}");
         }
     }
-
-    public override void Saque(decimal valor)
-    {
-
-    }
-
-
 }
 
 class Program
@@ -210,8 +210,10 @@ class Program
                     contaAtual.Saque(valorSaque);
                     break;
                 case 2:
-                    Console.WriteLine("Acesso a conta:");
-                    AcessarConta();
+                    Console.WriteLine("Deposito:");
+              Console.WriteLine("Digite o valor que deseja depositar:");
+                    decimal valorDeposito = decimal.Parse(Console.ReadLine());
+                    contaAtual.Depositar(valorDeposito);
                     break;
                 default:
                     Console.WriteLine("Opção inválida, digite novamente:");
@@ -251,7 +253,7 @@ class Program
     {
         Console.WriteLine("Digite o nome do titular da conta:");
         string nomeTitular = Console.ReadLine();
-        Console.WriteLine("Digite o saldo inicial:");
+        Console.WriteLine("Digite o valro que deseja depositar:");
         decimal saldo = decimal.Parse(Console.ReadLine());
         Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial");
         int opcaoTipoConta = int.Parse(Console.ReadLine());
@@ -265,29 +267,28 @@ class Program
             3 => "Empresarial",
             _ => throw new ArgumentException("Tipo de conta inválido")
         };
+
+        ContaBancaria novaConta = null;
         if (tipoConta == "Corrente")
         {
             QuantidadeContasBancaria++;
-            ContaBancaria novaConta = new ContaCorrente(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
-            novaConta.ExibirInformacaoConta();
-            ContasBancaria.Add(novaConta);
-
+            novaConta = new ContaCorrente(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
         }
         else if (tipoConta == "Poupança")
         {
             QuantidadeContasBancaria++;
-            ContaBancaria novaConta = new ContaPoupanca(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
-            novaConta.ExibirInformacaoConta();
-            ContasBancaria.Add(novaConta);
+            novaConta = new ContaPoupanca(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
         }
         else if (tipoConta == "Empresarial")
         {
             QuantidadeContasBancaria++;
-            ContaBancaria novaConta = new ContaEmpresarial(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
+            novaConta = new ContaEmpresarial(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
+        }
+        if(novaConta != null)
+        {
             novaConta.ExibirInformacaoConta();
             ContasBancaria.Add(novaConta);
         }
-        Menu();
     }
     static void Main(string[] args)
     {
