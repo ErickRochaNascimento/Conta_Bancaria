@@ -33,23 +33,18 @@ public abstract class ContaBancaria
 
     public virtual void Saque(decimal valor)
     {
-        bool saqueRealizado = false;
 
-        do
-        {
+    
+        
             if (Saldo >= valor && valor > 0)
             {
                 Saldo -= valor;
                 Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
-                saqueRealizado = true;
-                break;
             }
             else
             {
                 Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
-                break;
             }
-        } while (true);
         
     }
 
@@ -62,7 +57,7 @@ public abstract class ContaBancaria
         }
         else
         {
-            Console.WriteLine("Valor de deposito inválido. Tente novamente.");
+            Console.WriteLine("Valor de deposito igual 0 ou menor que 0. Digite um valor valido.");
 
 
         }
@@ -122,15 +117,12 @@ public class ContaCorrente : ContaBancaria
     {
         decimal valorTaxa = valor * TaxaSaque;
         decimal valorComTaxa = valor + valorTaxa;
-        bool saqueRealizado = false;
 
-        do
-        {
+       
             if (Saldo >= valorComTaxa && valor > 0)
             {
                 Saldo -= valorComTaxa;
                 Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
-                saqueRealizado = true;
 
             }
             else
@@ -138,7 +130,6 @@ public class ContaCorrente : ContaBancaria
                 Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
                 Console.WriteLine($"Taxa de Saque: {valorTaxa}");
             }
-        } while (saqueRealizado); 
     }
 }
 
@@ -226,7 +217,7 @@ class Program
             {
                 Console.Clear();
             }
-            Console.WriteLine("Opcão invalida. Tente novamente.");
+            Console.WriteLine("Opcão invalida. Digite um valor correspondente ao menu.");
         } while (true);
     }
 
@@ -269,7 +260,7 @@ class Program
                         }
                         else
                         {
-                            Console.WriteLine("Valor de saque inválido. Tente novamente.");
+                            Console.WriteLine("Valor inserido não é decimal. Digite um valor valido.");
                             Console.Clear();
                         }
 
@@ -303,7 +294,7 @@ class Program
                         }
                         else
                         {
-                            Console.WriteLine("Valor de deposito inválido. Tente novamente.");
+                            Console.WriteLine("Valor inserido não é decimal. Digite um valor valido.");
                             Console.Clear();
                         }
 
@@ -337,7 +328,7 @@ class Program
                         }
                         else
                         {
-                            Console.WriteLine("Valor de emprestimo inválido. Tente novamente.");
+                            Console.WriteLine("Valor inserido não é decimal. Digite um valor valido.");
                             Console.Clear();
                         }
 
@@ -496,7 +487,6 @@ class Program
                 1 => "Corrente",
                 2 => "Poupança",
                 3 => "Empresarial",
-                _ => throw new ArgumentException("Tipo de conta inválido")
             };
         } while (opcaoTipoConta < 1 || opcaoTipoConta > 3);
         
