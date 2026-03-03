@@ -486,25 +486,29 @@ class Program
         
 
         ContaBancaria novaConta = null;
-        if (tipoContaInput == "Corrente")
+        if (tipoConta == "Corrente")
         {
-            QuantidadeContasBancaria++;
             novaConta = new ContaCorrente(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
         }
         else if (tipoConta == "Poupança")
         {
-            QuantidadeContasBancaria++;
             novaConta = new ContaPoupanca(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
         }
         else if (tipoConta == "Empresarial")
         {
-            QuantidadeContasBancaria++;
             novaConta = new ContaEmpresarial(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
         }
         if(novaConta != null)
         {
+            QuantidadeContasBancaria++;
+
             novaConta.ExibirInformacaoConta();
             ContasBancaria.Add(novaConta);
+            Console.WriteLine("Conta criada com sucesso!");
+        }
+        else
+        {
+            Console.WriteLine("Erro ao criar a conta. Tipo de conta inválido ou outro problema.");
         }
     }
 
