@@ -286,7 +286,7 @@ class Program
                     do
                     {
                         Console.Write("Digite o valor que deseja depositar: ");
-                        valorDepositoInput = Console.ReadLine();
+                        valorDepositoInput = Console.ReadLine()!;
                         NumeroDeposito = decimal.TryParse(valorDepositoInput, out valorDeposito);
 
                         if (NumeroDeposito)
@@ -320,7 +320,7 @@ class Program
                     do
                     {
                         Console.Write("Digite o valor que deseja solicitar: ");
-                        valorEmprestimoInput = Console.ReadLine();
+                        valorEmprestimoInput = Console.ReadLine()!;
                         NumeroEmprestimo = decimal.TryParse(valorEmprestimoInput, out valorEmprestimo);
 
                         if (NumeroEmprestimo)
@@ -369,13 +369,29 @@ class Program
     static void AcessarConta()
     {
 
-
+        bool NumeroConta;
         int numeroContaConferir = 0;
         string numeroContaInput;
-        
+
+        do
+        {
             Console.Write("Digite o Numero da Conta: ");
             numeroContaInput = Console.ReadLine()!;
-            numeroContaConferir = int.Parse(numeroContaInput);
+            NumeroConta = int.TryParse(numeroContaInput, out numeroContaConferir);
+
+            if (NumeroConta)
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Numero de conta inválido. Tente novamente.");
+                Console.Clear();
+            }
+
+
+
+        } while (true);
 
 
 
@@ -452,11 +468,17 @@ class Program
 
 
         int opcaoTipoConta;
-        string tipoConta;
+        string tipoContaInput;
+        bool NumeroTipoConta;
+        string tipoConta = "";
         do
         {
+
             Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial ");
-            opcaoTipoConta = int.Parse(Console.ReadLine()!);
+            tipoContaInput = Console.ReadLine()!;
+            NumeroTipoConta = int.TryParse(tipoContaInput, out opcaoTipoConta);
+
+
 
             
 
@@ -472,7 +494,7 @@ class Program
         
 
         ContaBancaria novaConta = null;
-        if (tipoConta == "Corrente")
+        if (tipoContaInput == "Corrente")
         {
             QuantidadeContasBancaria++;
             novaConta = new ContaCorrente(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
