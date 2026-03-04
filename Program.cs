@@ -506,15 +506,15 @@ class Program
         ContaBancaria novaConta = null;
         if (tipoConta == "Corrente")
         {
-            novaConta = new ContaCorrente(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
+            novaConta = new ContaCorrente(nomeTitular, QuantidadeContasBancaria + 1, saldo, tipoConta, senha);
         }
         else if (tipoConta == "Poupança")
         {
-            novaConta = new ContaPoupanca(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
+            novaConta = new ContaPoupanca(nomeTitular, QuantidadeContasBancaria + 1, saldo, tipoConta, senha);
         }
         else if (tipoConta == "Empresarial")
         {
-            novaConta = new ContaEmpresarial(nomeTitular, QuantidadeContasBancaria, saldo, tipoConta, senha);
+            novaConta = new ContaEmpresarial(nomeTitular, QuantidadeContasBancaria + 1, saldo, tipoConta, senha);
         }
         if(novaConta != null)
         {
@@ -523,6 +523,7 @@ class Program
             novaConta.ExibirInformacaoConta();
             ContasBancaria.Add(novaConta);
             Console.WriteLine("Conta criada com sucesso!");
+            MenuConta(novaConta);
         }
         
     }
