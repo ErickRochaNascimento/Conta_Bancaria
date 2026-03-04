@@ -3,6 +3,86 @@ using System.Drawing;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 
+public static class InputHelper
+{
+    public static decimal ReadDecimal(string prompt, decimal minValue = 0, decimal maxValue = decimal.MaxValue)
+    {
+        decimal value;
+        string input;
+        bool isValid;
+
+        do
+        {
+            Console.WriteLine(prompt);
+            input = Console.ReadLine()!;
+            isValid = decimal.TryParse(input, out value);
+            if (!isValid)
+            {
+                Console.WriteLine("Entrada inválida. Por favor, digite um número decimal válido.");
+            }
+            else if (value < minValue || value > maxValue)
+            {
+                Console.WriteLine($"O valor deve estar entre {minValue} e {maxValue}.");
+                isValid = false;
+            }
+                
+
+        }
+        while (!isValid);
+        return value;
+    }
+
+    public static int ReadInt(string prompt, int minValue = int.MinValue, int maxValue = int.MaxValue)
+    {
+        int value;
+        string input;
+        bool isValid;
+
+        do
+        {
+            Console.Write(prompt);
+            input = Console.ReadLine()!;
+            isValid = int.TryParse(input, out value);
+
+            if (!isValid)
+            {
+                Console.WriteLine();
+            }
+            else if (value < minValue || value > maxValue)
+            {
+                Console.WriteLine($"O valor deve estar entre {minValue} e {maxValue}.");
+                isValid = false;
+            }
+
+        } while (!isValid);
+
+        return value;
+    }
+
+   
+
+    public static string ReadString(string prompt, int minLength = 1, int maxLength = 100)
+    {
+        string value;
+        bool isValid;
+
+        do
+        {
+            Console.Write(prompt);
+            value = Console.ReadLine()!;
+            isValid = !string.IsNullOrWhiteSpace(value) && value.Length >= minLength && value.Length <= maxLength;
+
+            if (!isValid)
+            {
+                Console.WriteLine($"Entrada inválida. O texto não pode ser vazio e deve ter entre {minLength} e {maxLength} caracteres.");
+            }
+
+        } while (!isValid);
+
+        return value;
+    }
+
+}
 
 public abstract class ContaBancaria
 {
@@ -185,30 +265,35 @@ class Program
        
         while (continuarApp)
         {
-            Console.Clear();
-            Console.WriteLine($"Digite o numero da opção:\n 1 Criar Conta \n 2 Acessar conta");
+            Console.Write($"Digite o numero da opção:\n 1 Criar Conta \n 2 Acessar conta \n 3 Sair \n Digite:");
             opcaoInput = Console.ReadLine()!;
             ehNumero = int.TryParse(opcaoInput, out opcaoConta);
             switch (opcaoConta)
             {
                 case 1:
-                    Console.WriteLine("Criação de conta:");
+                    Console.WriteLine("\nCriação de conta:");
                     CriarConta();
+                    continuarApp = true;
+
                     break;
                 case 2:
-                    Console.WriteLine("Acesso a conta:");
+                    Console.WriteLine("\nAcesso a conta:");
                     AcessarConta();
+                    continuarApp = true;
+                    break;
+                case 3:
+                    Console.WriteLine("Saindo do aplicativo...");
+                    continuarApp = false;
                     break;
             }
-            if (opcaoConta >= 1 && opcaoConta <= 2 && ehNumero)
+            if (opcaoConta >= 1 && opcaoConta <= 3 && ehNumero)
             {
                 break;
             }
-            else
-            {
-                Console.Clear();
-            }
             Console.WriteLine("Opcão invalida. Digite um valor correspondente ao menu.");
+            Thread.Sleep(1000);
+            Console.Clear();
+
         }
     }
 
@@ -238,30 +323,7 @@ class Program
 
                     Console.WriteLine("Saque:");
 
-                    bool NumeroSaque;
-                    decimal valorSaque;
-                    string valorSaqueInput;
-
-                    do
-                    {
-                        Console.Write("Digite o valor que deseja sacar: ");
-                        valorSaqueInput = Console.ReadLine()!;
-                        NumeroSaque = decimal.TryParse(valorSaqueInput, out valorSaque);
-
-                        if(NumeroSaque)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Valor inserido não é decimal. Digite um valor valido.");
-                            Console.Clear();
-                        }
-
-
-
-                    } while (true);
-                    
+                    decimal valorSaque = InputHelper.ReadDecimal("Digite o valor que deseja sacar: ", minValue: 0.01m); 
 
                     contaAtual.Saque(valorSaque);
                     Console.WriteLine("\n\n");
@@ -272,29 +334,8 @@ class Program
 
                     Console.WriteLine("Deposito:");
 
-                    bool NumeroDeposito;
-                    decimal valorDeposito;
-                    string valorDepositoInput;
-
-                    do
-                    {
-                        Console.Write("Digite o valor que deseja depositar: ");
-                        valorDepositoInput = Console.ReadLine()!;
-                        NumeroDeposito = decimal.TryParse(valorDepositoInput, out valorDeposito);
-
-                        if (NumeroDeposito)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Valor inserido não é decimal. Digite um valor valido.");
-                            Console.Clear();
-                        }
-
-
-
-                    } while (true);
+                    decimal valorDeposito = InputHelper.ReadDecimal("Digite o valor que deseja depositar: ", minValue: 0.01m);
+                    
 
 
                     
@@ -306,31 +347,7 @@ class Program
                     Console.Clear();
                     Console.WriteLine("Emprestimo:");
 
-                    bool NumeroEmprestimo;
-                    decimal valorEmprestimo;
-                    string valorEmprestimoInput;
-
-                    do
-                    {
-                        Console.Write("Digite o valor que deseja solicitar: ");
-                        valorEmprestimoInput = Console.ReadLine()!;
-                        NumeroEmprestimo = decimal.TryParse(valorEmprestimoInput, out valorEmprestimo);
-
-                        if (NumeroEmprestimo)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Valor inserido não é decimal. Digite um valor valido.");
-                            Console.Clear();
-                        }
-
-
-
-                    } while (true);
-
-
+                    decimal valorEmprestimo = InputHelper.ReadDecimal("Digite o valor que deseja solicitar: ", minValue: 0.01m);
 
                     contaAtual.LimiteEmprestimo(valorEmprestimo);
                     Console.WriteLine("\n\n");
@@ -425,13 +442,8 @@ class Program
 
     static void CriarConta()
     {
-        string nomeTitular;
-        do
-        {
-            Console.Write("Digite o nome do titular da conta: ");
-            nomeTitular = Console.ReadLine()!;
-
-        } while (string.IsNullOrWhiteSpace(nomeTitular));
+        string nomeTitular = InputHelper.ReadString("Digite o nome do titular da conta: ");
+        
 
 
         
@@ -454,6 +466,8 @@ class Program
             else
             {
                 Console.WriteLine("Senha não atende os requisitos. Tente novamente.");
+                Thread.Sleep(1000);
+                Console.Clear();
             }
         } while (true);
         
@@ -466,23 +480,27 @@ class Program
         string tipoConta = "";
         do
         {
-
             Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial ");
             tipoContaInput = Console.ReadLine()!;
             NumeroTipoConta = int.TryParse(tipoContaInput, out opcaoTipoConta);
 
-
-
-            
-      
-          
-            tipoConta = opcaoTipoConta switch
+            if(opcaoTipoConta >= 1 && opcaoTipoConta <= 3)
             {
-                1 => "Corrente",
-                2 => "Poupança",
-                3 => "Empresarial",
-            };
-        } while (opcaoTipoConta < 1 || opcaoTipoConta > 3);
+                tipoConta = opcaoTipoConta switch
+                {
+                    1 => "Corrente",
+                    2 => "Poupança",
+                    3 => "Empresarial",
+                };
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Erro ao criar a conta. Tipo de conta inválido ou outro problema.");
+                Console.Clear();
+            }
+
+        } while (true);
         
 
         ContaBancaria novaConta = null;
@@ -506,21 +524,16 @@ class Program
             ContasBancaria.Add(novaConta);
             Console.WriteLine("Conta criada com sucesso!");
         }
-        else
-        {
-            Console.WriteLine("Erro ao criar a conta. Tipo de conta inválido ou outro problema.");
-        }
+        
     }
 
     static void Main(string[] args)
     {
-        Console.WriteLine("=== BANCO ===");
-        do
-        {
+     
+        
             Console.WriteLine("=== BANCO ===");
             Menu();
 
-        }while(true);
     
         
         
