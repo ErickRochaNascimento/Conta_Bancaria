@@ -309,9 +309,8 @@ class Program
 
         while (continuarMenu)
         {
-            Console.Clear();
             Console.WriteLine($"=== Menu da Conta {contaAtual.NumeroConta} ===");
-            Console.WriteLine($"Digite o numero da opção:\n 1 Saque \n 2 Deposito \n 3 Emprestimo \n 4 Consultar saldo");
+            Console.WriteLine($"Digite o numero da opção:\n 1 Saque \n 2 Deposito \n 3 Emprestimo \n 4 Consultar saldo \n 5 Sair" );
           
             opcaoInput = Console.ReadLine()!;  
             ehNumero = int.TryParse(opcaoInput, out opcaoConta);
@@ -326,8 +325,9 @@ class Program
                     decimal valorSaque = InputHelper.ReadDecimal("Digite o valor que deseja sacar: ", minValue: 0.01m); 
 
                     contaAtual.Saque(valorSaque);
+                    continuarMenu = true;
                     Console.WriteLine("\n\n");
-                    MenuConta(contaAtual);
+
                     break;
                 case 2:
                     Console.Clear();
@@ -340,8 +340,9 @@ class Program
 
                     
                     contaAtual.Depositar(valorDeposito);
+                    continuarMenu = true;
+
                     Console.WriteLine("\n\n");
-                    MenuConta(contaAtual);
                     break;
                 case 3:
                     Console.Clear();
@@ -350,28 +351,35 @@ class Program
                     decimal valorEmprestimo = InputHelper.ReadDecimal("Digite o valor que deseja solicitar: ", minValue: 0.01m);
 
                     contaAtual.LimiteEmprestimo(valorEmprestimo);
+                    continuarMenu = true;
+
                     Console.WriteLine("\n\n");
-                    MenuConta(contaAtual);
                     break;
                 case 4:
                     Console.Clear();
                     Console.WriteLine("Consultar Saldo:");
                     contaAtual.Rendimento();
+                    continuarMenu = true;
+
                     Console.WriteLine("\n\n");
-                    MenuConta(contaAtual);
+                    break;
+                case 5:
+                    Console.Clear();
+                    continuarMenu = false;
+                    opcaoConta = 0;
+                    ehNumero = false;
+                    opcaoInput = "";
+
+                    Menu();
                     break;
         
             }
-            if (opcaoConta >= 1 && opcaoConta <= 4 && ehNumero)
+            if (opcaoConta <= 1 && opcaoConta >= 5 && ehNumero)
             {
-                break;
-            }
-            else
-            {
-
-                Console.Clear();
-            }
                 Console.WriteLine("Opcão invalida. Tente novamente.");
+            }
+           
+             
 
         };
     }
@@ -396,6 +404,7 @@ class Program
             else
             {
                 Console.WriteLine("Numero de conta inválido. Tente novamente.");
+                Thread.Sleep(1000);
                 Console.Clear();
             }
 
@@ -497,6 +506,7 @@ class Program
             else
             {
                 Console.WriteLine("Erro ao criar a conta. Tipo de conta inválido ou outro problema.");
+                Thread.Sleep(1000);
                 Console.Clear();
             }
 
@@ -534,6 +544,7 @@ class Program
         
             Console.WriteLine("=== BANCO ===");
             Menu();
+
 
     
         
