@@ -204,7 +204,10 @@ class Program
             }
         }
         Console.WriteLine("Conta não encontrada.");
-        Console.Write("Tente novamente: ");
+        Console.Write("Tente novamente");
+        Thread.Sleep(1000);
+        Console.Clear();
+
     }
 
     static void CriarConta()
