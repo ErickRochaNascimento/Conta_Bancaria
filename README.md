@@ -54,12 +54,6 @@ Para compilar e executar este projeto, você precisará ter o SDK do .NET 10.0 i
     dotnet run
     ```
 
-## Limitações
-
-*   **Persistência de Dados**: As contas e suas informações são armazenadas apenas em memória. Ao encerrar a aplicação, todos os dados são perdidos.
-*   **Interface de Usuário**: A interação é exclusivamente via console, sem interface gráfica.
-*   **Segurança**: As senhas são armazenadas em texto simples e não há mecanismos avançados de segurança.
-
 ---
 
 ## 🧑‍💻 Autor
